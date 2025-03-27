@@ -4,15 +4,41 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Facebook Video Downloader</title>
-    <link rel="stylesheet" href="styles.css">
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; margin-top: 50px; }
+        input, button { padding: 10px; margin: 10px; }
+        #videoLink { display: none; }
+    </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Facebook Video Downloader</h1>
-        <input type="text" id="videoUrl" placeholder="Enter Facebook Video URL">
-        <button onclick="downloadVideo()">Download</button>
-        <p id="status"></p>
-    </div>
-    <script src="script.js"></script>
+    <h2>Facebook Video Downloader</h2>
+    <input type="text" id="videoUrl" placeholder="Paste Facebook Video URL">
+    <button onclick="downloadVideo()">Download</button>
+
+    <p id="status"></p>
+    <a id="videoLink" target="_blank">Download Video</a>
+
+    <script>
+        function downloadVideo() {
+            const url = document.getElementById("videoUrl").value;
+            document.getElementById("status").innerText = "Fetching video...";
+            
+            fetch(`http://localhost:3000/download?url=${encodeURIComponent(url)}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        document.getElementById("videoLink").href = data.videoUrl;
+                        document.getElementById("videoLink").innerText = "Click here to download";
+                        document.getElementById("videoLink").style.display = "block";
+                        document.getElementById("status").innerText = "Video found!";
+                    } else {
+                        document.getElementById("status").innerText = "Error: " + data.error;
+                    }
+                })
+                .catch(error => {
+                    document.getElementById("status").innerText = "Failed to fetch video!";
+                });
+        }
+    </script>
 </body>
 </html>
