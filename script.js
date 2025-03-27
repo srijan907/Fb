@@ -1,27 +1,22 @@
-function downloadVideo() {
-    let url = document.getElementById("videoUrl").value;
-    let apiURL = `https://www.velyn.biz.id/api/downloader/facebookdl?url=${encodeURIComponent(url)}`;
-    
-    document.getElementById("status").innerText = "Processing...";
-    
-    fetch(apiURL)
+document.getElementById("downloadBtn").addEventListener("click", function () {
+    let videoUrl = document.getElementById("videoUrl").value;
+    if (!videoUrl) {
+        alert("Please enter a Facebook video URL.");
+        return;
+    }
+
+    fetch(`/download?url=${encodeURIComponent(videoUrl)}`)
         .then(response => response.json())
         .then(data => {
-            if (data.result && data.result.videoUrl) {
-                let downloadLink = document.createElement("a");
-                downloadLink.href = data.result.videoUrl;
-                downloadLink.download = "Facebook Video.mp4";
-                downloadLink.innerText = "Click here to Download";
-                downloadLink.style.color = "yellow";
-                
-                document.getElementById("status").innerHTML = "";
-                document.getElementById("status").appendChild(downloadLink);
+            if (data.success) {
+                window.location.href = data.downloadLink;
             } else {
-                document.getElementById("status").innerText = "Error: Video not found!";
+                alert("Failed to fetch video. Please try again.");
             }
         })
-        .catch(error => {
-            console.error(error);
-            document.getElementById("status").innerText = "Error fetching video!";
-        });
-}
+        .catch(error => console.error("Error:", error));
+});
+
+document.getElementById("contactBtn").addEventListener("click", function () {
+    window.location.href = "https://wa.me/919874188403"; // তোমার WhatsApp লিংক বসাও
+});
