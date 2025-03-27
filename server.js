@@ -1,32 +1,31 @@
-import express from "express";
-import cors from "cors";
-import fetch from "node-fetch";
+const express = require("express");
+const axios = require("axios");
+const cors = require("cors");
 
 const app = express();
+app.use(express.json());
 app.use(cors());
 
-const API_URL = "https://www.velyn.biz.id/api/downloader/facebookdl?url=";
-
 app.get("/download", async (req, res) => {
-    const videoUrl = req.query.url;
-    if (!videoUrl) {
-        return res.json({ success: false, message: "No URL provided" });
+    const { url } = req.query;
+    if (!url) {
+        return res.status(400).json({ error: "Please provide a Facebook video URL" });
     }
 
     try {
-        const response = await fetch(API_URL + encodeURIComponent(videoUrl));
-        const result = await response.json();
-        if (result && result.result && result.result.link) {
-            res.json({ success: true, downloadLink: result.result.link });
+        const apiUrl = `https://www.velyn.biz.id/api/downloader/facebookdl?url=${encodeURIComponent(url)}`;
+        const response = await axios.get(apiUrl);
+        if (response.data.status) {
+            return res.json({ videoUrl: response.data.data.url });
         } else {
-            res.json({ success: false, message: "Download link not found" });
+            return res.status(400).json({ error: "Failed to fetch video" });
         }
     } catch (error) {
-        console.error("Error fetching video:", error);
-        res.json({ success: false, message: "API error" });
+        return res.status(500).json({ error: "Server error" });
     }
 });
 
-app.listen(3000, () => {
-    console.log("Server is running on http://localhost:3000");
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
 });
