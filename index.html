@@ -4,17 +4,42 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Facebook Video Downloader</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div class="container">
         <h1>Facebook Video Downloader</h1>
         <input type="text" id="videoUrl" placeholder="Paste Facebook video link here">
-        <button id="downloadBtn">Download</button>
-        <button id="contactBtn">Contact</button>
-        <p class="powered-by">Powered by ＭＲ－ Ｒａｂｂｉｔ</p>
+        <button onclick="downloadVideo()">Download</button>
+        <button onclick="contact()">Contact</button>
+        <p id="error" style="color: red;"></p>
+        <p class="footer">Powered by ＭＲ－ Ｒａｂｂｉｔ</p>
     </div>
 
-    <script src="script.js"></script>
+    <script>
+        async function downloadVideo() {
+            const url = document.getElementById("videoUrl").value;
+            if (!url) {
+                document.getElementById("error").innerText = "Please enter a valid URL!";
+                return;
+            }
+
+            try {
+                const response = await fetch(`/download?url=${encodeURIComponent(url)}`);
+                const data = await response.json();
+                if (data.videoUrl) {
+                    window.location.href = data.videoUrl;
+                } else {
+                    document.getElementById("error").innerText = "Error fetching video!";
+                }
+            } catch (error) {
+                document.getElementById("error").innerText = "Server error!";
+            }
+        }
+
+        function contact() {
+            alert("Contact us at: example@email.com");
+        }
+    </script>
 </body>
 </html>
