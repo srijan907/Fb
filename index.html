@@ -9,7 +9,7 @@
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            background: linear-gradient(135deg, #1877F2, #4A90E2);
+            background: linear-gradient(135deg, #ff7eb3, #ff758c);
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -19,31 +19,32 @@
             text-align: center;
         }
         .container {
-            background: rgba(255, 255, 255, 0.1);
-            padding: 50px;
-            border-radius: 10px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            background: rgba(255, 255, 255, 0.2);
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
         }
         input[type="text"] {
-            width: 80%;
-            padding: 10px;
-            border: 2px solid blue;
-            border-radius: 5px;
-            margin-bottom: 10px;
+            width: 85%;
+            padding: 12px;
+            border: 2px solid white;
+            border-radius: 8px;
+            margin-bottom: 15px;
             outline: none;
+            font-size: 16px;
         }
         button {
-            padding: 10px 20px;
-            font-size: 16px;
+            padding: 12px 25px;
+            font-size: 18px;
             color: white;
-            background: linear-gradient(45deg, #4267B2, #29487D);
+            background: linear-gradient(45deg, #ff416c, #ff4b2b);
             border: none;
-            border-radius: 5px;
+            border-radius: 8px;
             cursor: pointer;
             transition: 0.3s;
         }
         button:hover {
-            background: #365899;
+            background: #e63956;
         }
         .result {
             margin-top: 20px;
@@ -66,22 +67,26 @@
             width: 60px;
             height: 60px;
             cursor: pointer;
+            transition: 0.3s;
         }
-        .popup {
+        .whatsapp-menu {
             display: none;
             position: absolute;
-            bottom: 80px;
-            right: 0;
+            bottom: 70px;
+            right: 10px;
             background: white;
             padding: 10px;
-            border-radius: 10px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
         }
-        .popup a {
+        .whatsapp-menu a {
             display: block;
             text-decoration: none;
-            color: black;
-            padding: 5px;
+            color: #333;
+            padding: 5px 10px;
+        }
+        .whatsapp-menu a:hover {
+            background: #eee;
         }
     </style>
 </head>
@@ -94,12 +99,11 @@
     </div>
     <div class="footer">MADE BY MR-RABBIT</div>
 
-    <!-- WhatsApp Contact -->
     <div class="whatsapp-container">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp" class="whatsapp-icon" onclick="togglePopup()">
-        <div class="popup" id="whatsappPopup">
-            <a href="https://wa.me/owner_number" target="_blank">Owner</a>
-            <a href="https://wa.me/helper_number" target="_blank">Helper</a>
+        <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" class="whatsapp-icon" onclick="toggleWhatsAppMenu()">
+        <div class="whatsapp-menu" id="whatsappMenu">
+            <a href="https://wa.me/+919874188403" target="_blank">📞 Contact Owner</a>
+            <a href="https://wa.me/+917439382677" target="_blank">💬 Contact Helper</a>
         </div>
     </div>
 
@@ -137,9 +141,9 @@
             });
     }
 
-    function togglePopup() {
-        const popup = document.getElementById('whatsappPopup');
-        popup.style.display = popup.style.display === "block" ? "none" : "block";
+    function toggleWhatsAppMenu() {
+        var menu = document.getElementById("whatsappMenu");
+        menu.style.display = menu.style.display === "block" ? "none" : "block";
     }
     </script>
 </body>
