@@ -4,42 +4,143 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Facebook Video Downloader</title>
-    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #1877F2, #4A90E2);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            color: white;
+            text-align: center;
+        }
+        .container {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 50px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        }
+        input[type="text"] {
+            width: 80%;
+            padding: 10px;
+            border: 2px solid blue;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            outline: none;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            color: white;
+            background: linear-gradient(45deg, #4267B2, #29487D);
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        button:hover {
+            background: #365899;
+        }
+        .result {
+            margin-top: 20px;
+        }
+        video {
+            max-width: 100%;
+            border-radius: 10px;
+        }
+        .footer {
+            margin-top: 20px;
+            font-size: 14px;
+            color: #ddd;
+        }
+        .whatsapp-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+        }
+        .whatsapp-icon {
+            width: 60px;
+            height: 60px;
+            cursor: pointer;
+        }
+        .popup {
+            display: none;
+            position: absolute;
+            bottom: 80px;
+            right: 0;
+            background: white;
+            padding: 10px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+        }
+        .popup a {
+            display: block;
+            text-decoration: none;
+            color: black;
+            padding: 5px;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
-        <h1>Facebook Video Downloader</h1>
-        <input type="text" id="videoUrl" placeholder="Paste Facebook video link here">
-        <button onclick="downloadVideo()">Download</button>
-        <button onclick="contact()">Contact</button>
-        <p id="error" style="color: red;"></p>
-        <p class="footer">Powered by ＭＲ－ Ｒａｂｂｉｔ</p>
+        <h1>RABBIT-XD Facebook Video Downloader</h1>
+        <input type="text" id="urlInput" placeholder="Enter Facebook Video URL">
+        <button onclick="fetchFacebookVideo()">Download</button>
+        <div id="result" class="result"></div>
+    </div>
+    <div class="footer">MADE BY MR-RABBIT</div>
+
+    <!-- WhatsApp Contact -->
+    <div class="whatsapp-container">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp" class="whatsapp-icon" onclick="togglePopup()">
+        <div class="popup" id="whatsappPopup">
+            <a href="https://wa.me/owner_number" target="_blank">Owner</a>
+            <a href="https://wa.me/helper_number" target="_blank">Helper</a>
+        </div>
     </div>
 
     <script>
-        async function downloadVideo() {
-            const url = document.getElementById("videoUrl").value;
-            if (!url) {
-                document.getElementById("error").innerText = "Please enter a valid URL!";
-                return;
-            }
-
-            try {
-                const response = await fetch(`/download?url=${encodeURIComponent(url)}`);
-                const data = await response.json();
-                if (data.videoUrl) {
-                    window.location.href = data.videoUrl;
+    function fetchFacebookVideo() {
+        const url = document.getElementById('urlInput').value;
+        const resultContainer = document.getElementById('result');
+        resultContainer.innerHTML = '';
+        if (!url) {
+            alert("Please enter a valid URL");
+            return;
+        }
+        resultContainer.innerHTML = '<p>Fetching...</p>';
+        
+        const apiUrl = `https://www.velyn.biz.id/api/downloader/facebookdl?url=${encodeURIComponent(url)}`;
+        
+        fetch(apiUrl)
+            .then(response => response.json())
+            .then(data => {
+                resultContainer.innerHTML = '';
+                if (data.status && data.data && data.data.url) {
+                    const mediaUrl = data.data.url;
+                    const videoElement = document.createElement('video');
+                    videoElement.src = mediaUrl;
+                    videoElement.controls = true;
+                    resultContainer.appendChild(videoElement);
                 } else {
-                    document.getElementById("error").innerText = "Error fetching video!";
+                    alert("Error: Media URL not found");
                 }
-            } catch (error) {
-                document.getElementById("error").innerText = "Server error!";
-            }
-        }
+            })
+            .catch(error => {
+                console.error("Error fetching the Facebook video:", error);
+                alert("There was an error fetching the video.");
+                resultContainer.innerHTML = '';
+            });
+    }
 
-        function contact() {
-            alert("Contact us at: example@email.com");
-        }
+    function togglePopup() {
+        const popup = document.getElementById('whatsappPopup');
+        popup.style.display = popup.style.display === "block" ? "none" : "block";
+    }
     </script>
 </body>
 </html>
