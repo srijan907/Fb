@@ -117,9 +117,10 @@
             return;
         }
         resultContainer.innerHTML = '<p>Fetching...</p>';
-        
-        const apiUrl = `https://www.velyn.biz.id/api/downloader/facebookdl?url=${encodeURIComponent(url)}`;
-        
+
+        // নতুন API URL
+        const apiUrl = `https://apis.davidcyriltech.my.id/facebook2?url=${encodeURIComponent(url)}`;
+
         fetch(apiUrl)
             .then(response => response.json())
             .then(data => {
